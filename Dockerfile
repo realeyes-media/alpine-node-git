@@ -1,6 +1,6 @@
 FROM node:alpine
 
-RUN apk add --update git openssh && \
+RUN apk add --update git openssh gawk && \
   rm -rf /tmp/* /var/cache/apk/*
 
 #make sure we get fresh keys
