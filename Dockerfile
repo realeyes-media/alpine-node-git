@@ -13,4 +13,4 @@ RUN ln -s /bin/bash /bin/sh
 # Update all NPM packages
 RUN npm -g update && npm install -g npm
 
-CMD [ "/bin/ash" ]
+CMD [ "/bin/sh","--version" ]
