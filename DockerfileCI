@@ -1,0 +1,18 @@
+FROM quay.io/realeyes/alpine-node-git:master
+
+ENV CHGLOG_VERSION 0.7.1
+
+# Add that CI candy!
+RUN apk add --update \
+    curl wget && \
+    rm -rf /tmp/* /var/cache/apk/*
+
+# Install https://github.com/git-chglog
+WORKDIR /temp
+RUN wget https://github.com/git-chglog/git-chglog/releases/download/${CHGLOG_VERSION}/git-chglog_linux_amd64 && \
+    mv git-chglog_linux_amd64 /usr/local/bin/git-chglog && \
+    chmod +x /usr/local/bin/git-chglog
+
+WORKDIR /build
+
+CMD ['/bin/bash']
