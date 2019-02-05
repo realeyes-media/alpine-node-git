@@ -4,7 +4,7 @@ ENV CHGLOG_VERSION 0.7.1
 
 # Add that CI candy!
 RUN apk add --update \
-    curl wget && \
+    curl wget zip && \
     rm -rf /tmp/* /var/cache/apk/*
 
 # Install https://github.com/git-chglog
