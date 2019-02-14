@@ -1,6 +1,7 @@
 FROM quay.io/realeyes/alpine-node-git:master
 
 ENV CHGLOG_VERSION 0.7.1
+ENV HUGO_VERSION 0.54.0
 
 # Add that CI candy!
 RUN apk add --update \
@@ -13,6 +14,14 @@ RUN wget https://github.com/git-chglog/git-chglog/releases/download/${CHGLOG_VER
     mv git-chglog_linux_amd64 /usr/local/bin/git-chglog && \
     chmod +x /usr/local/bin/git-chglog
 
+# Install Hugo SSG
+RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz && \
+    tar -xvzf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz && \
+    mv hugo /usr/local/bin/hugo && \
+    chmod +x /usr/local/bin/hugo
+
 WORKDIR /build
+
+RUN rm -rf temp
 
 CMD ['/bin/bash']
