@@ -20,6 +20,20 @@ RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hug
     mv hugo /usr/local/bin/hugo && \
     chmod +x /usr/local/bin/hugo
 
+# Install AWS CLI
+RUN apk -v --update add \
+        python \
+        py-pip \
+        groff \
+        less \
+        mailcap \
+        curl \
+        git \
+        && \
+    pip install --upgrade awscli s3cmd python-magic && \
+    apk -v --purge del py-pip && \
+    rm /var/cache/apk/*
+
 WORKDIR /build
 
 RUN rm -rf temp
