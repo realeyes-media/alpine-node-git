@@ -3,6 +3,7 @@ FROM quay.io/realeyes/alpine-node-git:master
 ENV CHGLOG_VERSION 0.7.1
 ENV HUGO_VERSION 0.54.0
 ENV CLOUD_SDK_VERSION=234.0.0
+ENV FLARECTL_VERSION=0.8.5
 
 # Add that CI candy!
 RUN apk add --update \
@@ -14,6 +15,11 @@ WORKDIR /temp
 RUN wget https://github.com/git-chglog/git-chglog/releases/download/${CHGLOG_VERSION}/git-chglog_linux_amd64 && \
     mv git-chglog_linux_amd64 /usr/local/bin/git-chglog && \
     chmod +x /usr/local/bin/git-chglog
+
+# Install CloudFlare FlareCTL
+RUN wget https://github.com/cloudflare/cloudflare-go/releases/download/v${FLARECTL_VERSION}/flarectl.linux.amd64 && \
+    mv flarectl.linux.amd64 /usr/local/bin/flarectl && \
+    chmod +x /usr/local/bin/flarectl
 
 # Install Hugo SSG
 RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz && \
