@@ -22,7 +22,8 @@ RUN wget https://github.com/git-chglog/git-chglog/releases/download/${CHGLOG_VER
 # Install GoFish Package Manager
 COPY gofishinstall.sh install.sh
 RUN chmod +x install.sh && \
-    ./install.sh
+    ./install.sh && \
+    rm -f install.sh
 
 # Install CloudFlare FlareCTL
 RUN wget https://github.com/cloudflare/cloudflare-go/releases/download/v${FLARECTL_VERSION}/flarectl.linux.amd64 && \
@@ -70,6 +71,9 @@ RUN apk --no-cache add \
     gcloud config set metrics/environment github_docker_image && \
     gcloud --version
 
+# Installing Helm and Kubectl
+RUN gofish install kubectl && \
+    gofish install helm
 
 WORKDIR /build
 
