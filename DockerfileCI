@@ -20,8 +20,8 @@ RUN wget https://github.com/git-chglog/git-chglog/releases/download/${CHGLOG_VER
     chmod +x /usr/local/bin/git-chglog
 
 # Install GoFish Package Manager
-RUN wget https://raw.githubusercontent.com/fishworks/gofish/master/scripts/install.sh && \
-    chmod +x install.sh && \
+COPY gofishinstall.sh install.sh
+RUN chmod +x install.sh && \
     ./install.sh
 
 # Install CloudFlare FlareCTL
