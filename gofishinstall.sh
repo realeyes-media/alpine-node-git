@@ -101,8 +101,8 @@ installFile() {
   TMPDIR_BIN="$TMPDIR/$OS-$ARCH"
   echo "Preparing to install into ${INSTALL_PREFIX}"
   # Use * to also copy the file withe the exe suffix on Windows
-  sudo mkdir -p "$INSTALL_PREFIX"
-  sudo cp "$TMPDIR_BIN/$PROJECT_NAME" "$INSTALL_PREFIX"
+  mkdir -p "$INSTALL_PREFIX"
+  cp "$TMPDIR_BIN/$PROJECT_NAME" "$INSTALL_PREFIX"
 }
 
 # fail_trap is executed if an error occurs.
