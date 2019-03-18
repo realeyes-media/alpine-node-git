@@ -10,7 +10,7 @@ ENV HELM_VERSION=2.13.0
 
 # Add that CI candy!
 RUN apk add --update \
-    curl wget zip bash && \
+    curl wget zip bash sudo && \
     rm -rf /tmp/* /var/cache/apk/*
 
 # Install https://github.com/git-chglog
@@ -19,11 +19,14 @@ RUN wget https://github.com/git-chglog/git-chglog/releases/download/${CHGLOG_VER
     mv git-chglog_linux_amd64 /usr/local/bin/git-chglog && \
     chmod +x /usr/local/bin/git-chglog
 
-# Install GoFish Package Manager
+# Install GoFish Package Manager, Helm and Kubectl
 COPY gofishinstall.sh install.sh
 RUN chmod +x install.sh && \
     ./install.sh && \
-    rm -f install.sh
+    rm -f install.sh && \
+    gofish init && \
+    gofish install kubectl && \
+    gofish install helm
 
 # Install CloudFlare FlareCTL
 RUN wget https://github.com/cloudflare/cloudflare-go/releases/download/v${FLARECTL_VERSION}/flarectl.linux.amd64 && \
