@@ -7,6 +7,7 @@ ENV FLARECTL_VERSION=0.8.5
 ENV GOFISH_VERSION=0.10.0
 ENV KUBECTL_VERSION=1.13.4
 ENV HELM_VERSION=2.13.0
+ENV YQ_VERSION=2.2.1
 
 # Add that CI candy!
 RUN apk add --update \
@@ -38,6 +39,14 @@ RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hug
     tar -xvzf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz && \
     mv hugo /usr/local/bin/hugo && \
     chmod +x /usr/local/bin/hugo
+
+# Install YQ
+RUN wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 && \
+    mv yq_linux_amd64 /usr/local/bin/yq && \
+    chmod +x /usr/local/bin/yq
+
+
+https://github.com/mikefarah/yq/releases/download/2.2.1/yq_linux_amd64
 
 # Install AWS CLI
 RUN apk -v --update add \
