@@ -8,6 +8,7 @@ ENV GOFISH_VERSION=0.10.0
 ENV KUBECTL_VERSION=1.13.4
 ENV HELM_VERSION=2.13.0
 ENV YQ_VERSION=2.2.1
+ENV RANCHER_VERSION=2.2.0
 
 # Add that CI candy!
 RUN apk add --update \
@@ -83,6 +84,12 @@ RUN apk --no-cache add \
 # Installing Helm and Kubectl
 RUN gofish install kubectl && \
     gofish install helm
+
+# Install Rancher CLI
+RUN wget https://github.com/rancher/cli/releases/download/v${RANCHER_VERSION}/rancher-linux-amd64-v${RANCHER_VERSION}.tar.gz && \
+    tar -zxvf rancher-linux-amd64-v${RANCHER_VERSION}.tar.gz && \
+    mv rancher-v${RANCHER_VERSION}/rancher /usr/local/bin/rancher && \
+    chmod +x /usr/local/bin/rancher
 
 WORKDIR /build
 
