@@ -99,6 +99,7 @@ RUN wget https://github.com/ncw/rclone/releases/download/v1.47.0/rclone-v${RCLON
     chmod +x /usr/local/bin/rclone && \
     rm -rf rclone-v${RCLONE_VERSION}-linux-amd64 && \
     rm -rf rclone-v${RCLONE_VERSION}-linux-amd64.zip
+RUN mkdir -p /root/.config && mkdir -p /root/.config/rclone
 
 WORKDIR /build
 
