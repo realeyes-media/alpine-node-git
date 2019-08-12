@@ -1,15 +1,14 @@
 FROM quay.io/realeyes/alpine-node-git:master
 
 ENV CHGLOG_VERSION 0.7.1
-ENV HUGO_VERSION 0.54.0
-ENV CLOUD_SDK_VERSION=234.0.0
+ENV HUGO_VERSION 0.56.3
+ENV CLOUD_SDK_VERSION=257.0.0
 ENV FLARECTL_VERSION=0.8.5
-ENV GOFISH_VERSION=0.10.0
-ENV KUBECTL_VERSION=1.13.4
-ENV HELM_VERSION=2.13.0
-ENV YQ_VERSION=2.2.1
+ENV KUBECTL_VERSION=1.14.3
+ENV HELM_VERSION=2.14.3
+ENV YQ_VERSION=2.4.0
 ENV RANCHER_VERSION=2.2.0
-ENV RCLONE_VERSION=1.47.0
+ENV RCLONE_VERSION=1.48.0
 
 # Add that CI candy!
 RUN apk add --update \
@@ -22,14 +21,17 @@ RUN wget https://github.com/git-chglog/git-chglog/releases/download/${CHGLOG_VER
     mv git-chglog_linux_amd64 /usr/local/bin/git-chglog && \
     chmod +x /usr/local/bin/git-chglog
 
-# Install GoFish Package Manager, Helm and Kubectl
-COPY gofishinstall.sh install.sh
-RUN chmod +x install.sh && \
-    ./install.sh && \
-    rm -f install.sh && \
-    gofish init && \
-    gofish install kubectl && \
-    gofish install helm
+# Install Kubectl https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux
+RUN wget https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    mv kubectl /usr/local/bin/kubectl && \
+    chmod +x /usr/local/bin/kubectl
+
+# Install Helm
+RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
+    tar -zxvf helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
+    mv linux-amd64/helm /usr/local/bin/helm && \
+    chmod +x /usr/local/bin/helm && \
+    rm -rf helm-v${HELM_VERSION}-linux-amd64.tar.gz linux-amd64
 
 # Install CloudFlare FlareCTL
 RUN wget https://github.com/cloudflare/cloudflare-go/releases/download/v${FLARECTL_VERSION}/flarectl.linux.amd64 && \
@@ -46,6 +48,21 @@ RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hug
 RUN wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 && \
     mv yq_linux_amd64 /usr/local/bin/yq && \
     chmod +x /usr/local/bin/yq
+
+# Install Rancher CLI
+RUN wget https://github.com/rancher/cli/releases/download/v${RANCHER_VERSION}/rancher-linux-amd64-v${RANCHER_VERSION}.tar.gz && \
+    tar -zxvf rancher-linux-amd64-v${RANCHER_VERSION}.tar.gz && \
+    mv rancher-v${RANCHER_VERSION}/rancher /usr/local/bin/rancher && \
+    chmod +x /usr/local/bin/rancher
+
+# Install RClone
+RUN wget https://github.com/ncw/rclone/releases/download/v${RCLONE_VERSION}/rclone-v${RCLONE_VERSION}-linux-amd64.zip && \
+    unzip rclone-v${RCLONE_VERSION}-linux-amd64.zip && \
+    mv rclone-v${RCLONE_VERSION}-linux-amd64/rclone /usr/local/bin/rclone && \
+    chmod +x /usr/local/bin/rclone && \
+    rm -rf rclone-v${RCLONE_VERSION}-linux-amd64 && \
+    rm -rf rclone-v${RCLONE_VERSION}-linux-amd64.zip
+RUN mkdir -p /root/.config && mkdir -p /root/.config/rclone
 
 # Install AWS CLI
 RUN apk -v --update add \
@@ -81,25 +98,6 @@ RUN apk --no-cache add \
     gcloud config set component_manager/disable_update_check true && \
     gcloud config set metrics/environment github_docker_image && \
     gcloud --version
-
-# Installing Helm and Kubectl
-RUN gofish install kubectl && \
-    gofish install helm
-
-# Install Rancher CLI
-RUN wget https://github.com/rancher/cli/releases/download/v${RANCHER_VERSION}/rancher-linux-amd64-v${RANCHER_VERSION}.tar.gz && \
-    tar -zxvf rancher-linux-amd64-v${RANCHER_VERSION}.tar.gz && \
-    mv rancher-v${RANCHER_VERSION}/rancher /usr/local/bin/rancher && \
-    chmod +x /usr/local/bin/rancher
-
-# Install RClone
-RUN wget https://github.com/ncw/rclone/releases/download/v1.47.0/rclone-v${RCLONE_VERSION}-linux-amd64.zip && \
-    unzip rclone-v${RCLONE_VERSION}-linux-amd64.zip && \
-    mv rclone-v${RCLONE_VERSION}-linux-amd64/rclone /usr/local/bin/rclone && \
-    chmod +x /usr/local/bin/rclone && \
-    rm -rf rclone-v${RCLONE_VERSION}-linux-amd64 && \
-    rm -rf rclone-v${RCLONE_VERSION}-linux-amd64.zip
-RUN mkdir -p /root/.config && mkdir -p /root/.config/rclone
 
 WORKDIR /build
 
