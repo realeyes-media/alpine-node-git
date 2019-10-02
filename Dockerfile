@@ -1,6 +1,6 @@
 FROM node:8.16-alpine
 
-RUN apk add --update git openssh gawk tzdata bash && \
+RUN apk add --update git openssh gawk tzdata bash tini && \
   rm -rf /tmp/* /var/cache/apk/*
 
 #make sure we get fresh keys
