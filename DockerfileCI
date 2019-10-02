@@ -1,5 +1,5 @@
 FROM openfaas/faas-cli:0.9.2 as faas
-FROM quay.io/realeyes/alpine-node-git:master
+FROM quay.io/realeyes/alpine-node-git:node8
 
 ENV CHGLOG_VERSION 0.7.1
 ENV HUGO_VERSION 0.56.3
