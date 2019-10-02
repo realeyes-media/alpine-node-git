@@ -1,4 +1,4 @@
-FROM node:8.11-alpine
+FROM node:8.16-alpine
 
 RUN apk add --update git openssh gawk tzdata bash && \
   rm -rf /tmp/* /var/cache/apk/*
